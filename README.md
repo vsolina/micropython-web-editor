@@ -3,7 +3,7 @@ MicroPython web code editor / IDE
 
 Web-based code editor for WiFi + MicroPython enabled microcontrollers
 
-Uses Cloud9 Ace editor for code editing [Cloud9 Ace](https://ace.c9.io/)
+Uses [Cloud9 Ace](https://ace.c9.io/) editor for code editing 
 
 Has an integrated WebREPL console
 
@@ -53,8 +53,8 @@ import weditor.start
 
 Install shell for MicroPython (optional)
 ----------------------------------------
-
-[MicroPython shell](https://github.com/vsolina/mipyshell)
+For easier file system operations (mv, rm, mkdir, df, etc.)
+[MicroPython shell](https://github.com/vsolina/mipyshell) - instructions on this page
 
 
 Bundled open-source projects
@@ -77,5 +77,4 @@ Notes
 * File saving does not work well with large files yet
 * This editor was mostly written and debugged using itself
 * esp8266 does not have enough RAM to run all required components (yet)
-* When using the IDE, Internet connection is required because Ace is hosted on cdnjs (to reduce storage requirements)
-*  but it's possible to bundle required ace.js files on Controller's flash (raise an Issue and I'll explain how to do it)
+* When using the IDE, Internet connection is required because Ace is hosted on cdnjs (to reduce storage requirements); but it's possible to bundle required ace.js files on Controller's flash (raise an Issue and I'll explain how to do it)
