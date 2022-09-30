@@ -2,8 +2,11 @@ MicroPython web code editor / IDE
 =================================
 
 Web-based code editor for WiFi + MicroPython enabled microcontrollers
+
 Uses Cloud9 Ace editor for code editing [Cloud9 Ace](https://ace.c9.io/)
+
 Has an integrated WebREPL console
+
 Developed and tested on ESP32, but should work on other boards too
 
 
@@ -16,12 +19,14 @@ Installation
 2. Copy contents of /weditor and lib/microWebSrv.py to the root of Controller's file system
 
     $ cd micropython-web-editor
+
     $ ampy --port /dev/ttyUSB0 put weditor /weditor
+
     $ ampy --port /dev/ttyUSB0 put lib /lib
 
 3. Setup WebREPL (optional)
 On your Controller run:
-    >>> import webrepl_setup
+    import webrepl_setup
 
 4. Update boot.py
 
@@ -54,9 +59,13 @@ Bundled open-source projects
 ----------------------------
 
 *This project would not be possible without these exceptional projects*
+
 [Cloud9 Ace code editor](https://github.com/ajaxorg/ace)
+
 [MicroWebSrv](https://github.com/jczic/MicroWebSrv/)
+
 [MicroPython's WebREPL](https://github.com/micropython/webrepl)
+
 [And most importantly: MicroPython](https://github.com/micropython)
 
 
