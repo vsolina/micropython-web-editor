@@ -9,17 +9,16 @@ function initEditor() {
 }
 
 function showNotification(text, seconds) {
-    var notifHolder = document.getElementById("notification");
-    var notifText = document.getElementById("notificationText");
-    notifText.innerHTML = text;
-    notifHolder.style.display = "block";
+    var notification = document.getElementById("notification");
+    notification.innerHTML = text;
+    notification.style.display = "block";
     if (seconds) {
-        setTimeout(hideNotification, seconds*1000);
+        setTimeout(hideNotification, seconds * 1000);
     }
 }
 function hideNotification() {
-    var notifHolder = document.getElementById("notification");
-    notifHolder.style.display = "none";
+    var notification = document.getElementById("notification");
+    notification.style.display = "none";
 }
 
 function actionRefreshDirectory() {
@@ -32,8 +31,8 @@ function actionActivateDirectory(event) {
 }
 function actionActivateParentDirectory(event) {
     var components = window.activeFileDir.split("/");
-    if (components.lenght <= 2) return;
-    components.splice(components.length-2, 1);
+    if (components.length <= 2) return;
+    components.splice(components.length - 2, 1);
     window.activeFileDir = components.join("/");
     loadDirPath(window.activeFileDir);
 }
@@ -46,27 +45,27 @@ function actionCreateNewFile(event) {
     if (fname) {
         fpath = window.activeFileDir + fname;
         showNotification("Creating file: " + fpath);
-        fetch("/newfile?path="+fpath).then(response=>response.json()).then(json=>createdFile(json));
+        fetch("/newfile?path=" + fpath).then(response => response.json()).then(json => createdFile(json));
     }
 }
 function actionActivateFile(event) {
     var fpath = window.activeFileDir + event.target.innerHTML;
     console.log("Loading file ", "==" + fpath + "==");
     showNotification("Loading file: " + fpath);
-    fetch("/file?path="+fpath).then(response=>response.json()).then(json=>loadedFile(fpath, json['lines']));
+    fetch("/file?path=" + fpath).then(response => response.json()).then(json => loadedFile(fpath, json['lines']));
 }
 function loadedFile(fname, lines) {
     editor.setValue(lines);
     var components = fname.split(".");
     var mode = "plain_text";
     if (components.length > 1) {
-        var ext = components[components.length-1];
-        if (ext=="py") mode = "python";
-        if (ext=="html") mode = "html";
-        if (ext=="css") mode = "css";
-        if (ext=="js") mode = "javascript";
+        var ext = components[components.length - 1];
+        if (ext == "py") mode = "python";
+        if (ext == "html") mode = "html";
+        if (ext == "css") mode = "css";
+        if (ext == "js") mode = "javascript";
     }
-    editor.session.setMode("ace/mode/"+mode);
+    editor.session.setMode("ace/mode/" + mode);
     window.activeFilePath = fname;
     window.activeFileName = fname;
     editor.selection.clearSelection();
@@ -77,7 +76,7 @@ function actionSaveFile() {
     fetch('/savefile', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({"lines": globalEditor.getValue(), "path": window.activeFilePath}),
     })
@@ -95,7 +94,7 @@ function actionSaveFile() {
 function loadDirPath(path) {
     window.activeFileDir = path;
     showNotification("Loading directory: " + path);
-    fetch("/dir?path="+path).then(response=>response.json()).then(json=>updateFileList(json));
+    fetch("/dir?path=" + path).then(response => response.json()).then(json => updateFileList(json));
 }
 function updateFileList(json) {
     var files = json.files;
@@ -122,7 +121,7 @@ function updateFileList(json) {
     }
     
     addSpan("FILES", "left_title");
-    addSpan("+ new file ..", "left_element left_action", actionCreateNewFile);
+    addSpan("new file...", "left_element left_action", actionCreateNewFile);
 
     for (var fileName of files) {
         addSpan(fileName, "left_element left_file", actionActivateFile);
