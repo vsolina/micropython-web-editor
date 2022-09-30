@@ -18,15 +18,17 @@ Installation
 1. Flash a recent version (1.17+) of MicroPython to your Controller (http://micropython.org/download)
 2. Copy contents of /weditor and lib/microWebSrv.py to the root of Controller's file system
 
-    $ cd micropython-web-editor
-
-    $ ampy --port /dev/ttyUSB0 put weditor /weditor
-
-    $ ampy --port /dev/ttyUSB0 put lib /lib
+```
+$ cd micropython-web-editor
+$ ampy --port /dev/ttyUSB0 put weditor /weditor
+$ ampy --port /dev/ttyUSB0 put lib /lib
+```
 
 3. Setup WebREPL (optional)
 On your Controller run:
-    import webrepl_setup
+```
+import webrepl_setup
+```
 
 4. Update boot.py
 
@@ -72,8 +74,8 @@ Bundled open-source projects
 Notes
 -----
 
-File saving does not work well with large files yet
-This editor was mostly written and debugged using itself
-esp8266 does not have enough RAM to run all required components (yet)
-When using the IDE, Internet connection is required because Ace is hosted on cdnjs (to reduce flash storage requirements)
- but it's possible to bundle required ace.js files on Controller's flash (raise an Issue and I'll explain how to do it)
+* File saving does not work well with large files yet
+* This editor was mostly written and debugged using itself
+* esp8266 does not have enough RAM to run all required components (yet)
+* When using the IDE, Internet connection is required because Ace is hosted on cdnjs (to reduce storage requirements)
+*  but it's possible to bundle required ace.js files on Controller's flash (raise an Issue and I'll explain how to do it)
