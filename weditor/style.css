@@ -1,0 +1,81 @@
+
+body {
+    overflow: scroll;
+    margin: 0;
+    height: 100vh;
+    background-color: black;
+}
+
+#editor2 {
+    margin: 0;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#editor {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: black;
+}
+#left {
+    width: 10%; height:100%; float: left; position: relative; background-color: black; overflow: scroll; user-select: none; color: white;
+}
+#notification {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding-bottom: 10px;
+    text-align: center;
+}
+#notificationText {
+    background-color: rgb(30,25,25);
+    width: 50%;
+    margin: 0 auto;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 5px;
+    color: white;
+}
+
+.left_title {
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+.left_element {
+    width: calc(100% - 20px - 2px - 10px);
+    margin: 5px 5px 0px 5px;
+    padding: 10px;
+    position: relative;
+    float: left;
+    border-radius: 5px;
+    color: white;
+}
+.left_element:hover {
+    background-color: rgb(45,45,45);
+}
+.left_action {
+    text-align: center;
+    background-color: rgb(25,35,25);
+}
+.left_file {
+    background-color: rgb(25,25,25);
+}
+.left_dir {
+    background-color: rgb(35,25,25);
+}
+
+#term {
+    width: 30%; height:calc(100% - 0px); float: left; position: relative; background-color: black;
+}
+.header {
+    width: 90%; height:0; float: left; position: relative; background-color: green;
+}
+.eholder {
+    width: 60%; height:calc(100% - 0px); float: left; position: relative; background-color: black;
+}
