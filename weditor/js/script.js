@@ -1,4 +1,7 @@
 function initEditor() {
+    document.getElementById("action-save").style.display = 'none';
+    document.getElementById("action-save-run").style.display = 'none';
+    document.getElementById("action-stop").style.display = 'none';
     var editor = ace.edit("editor");
     window.globalEditor = editor;
     editor.setTheme("ace/theme/dracula");
@@ -6,6 +9,7 @@ function initEditor() {
     editor.setValue("\n<- Select a file to edit\n");
     window.editor = editor;
     loadDirPath("/");
+    updateTitle();
 }
 
 function showNotification(text, seconds) {
@@ -21,74 +25,28 @@ function hideNotification() {
     notification.style.display = "none";
 }
 
-function actionRefreshDirectory() {
-    loadDirPath(window.activeFileDir);
-}
-function actionActivateDirectory(event) {
-    var dpath = event.target.innerHTML;
-    window.activeFileDir += dpath + "/";
-    loadDirPath(window.activeFileDir);
-}
-function actionActivateParentDirectory(event) {
-    var components = window.activeFileDir.split("/");
-    if (components.length <= 2) return;
-    components.splice(components.length - 2, 1);
-    window.activeFileDir = components.join("/");
-    loadDirPath(window.activeFileDir);
-}
-
-function actionCreateNewFile(event) {
-    function createdFile(response) {
-        loadDirPath(window.activeFileDir);
-    }
-    var fname = prompt("New file name");
-    if (fname) {
-        fpath = window.activeFileDir + fname;
-        showNotification("Creating file: " + fpath);
-        fetch("/newfile?path=" + fpath).then(response => response.json()).then(json => createdFile(json));
-    }
-}
-function actionActivateFile(event) {
-    var fpath = window.activeFileDir + event.target.innerHTML;
-    console.log("Loading file ", "==" + fpath + "==");
-    showNotification("Loading file: " + fpath);
-    fetch("/file?path=" + fpath).then(response => response.json()).then(json => loadedFile(fpath, json['lines']));
-}
 function loadedFile(fname, lines) {
     editor.setValue(lines);
     var components = fname.split(".");
     var mode = "plain_text";
     if (components.length > 1) {
+        let display = "none";
         var ext = components[components.length - 1];
-        if (ext == "py") mode = "python";
+        if (ext == "py") { mode = "python"; display = "inline-block"; }
         if (ext == "html") mode = "html";
         if (ext == "css") mode = "css";
         if (ext == "js") mode = "javascript";
+
+        document.getElementById("action-save-run").style.display = display;
+        document.getElementById("action-stop").style.display = display;
     }
     editor.session.setMode("ace/mode/" + mode);
     window.activeFilePath = fname;
     window.activeFileName = fname;
+    document.getElementById("active-path").innerHTML = fname;
+    document.getElementById("action-save").style.display = 'inline-block';
     editor.selection.clearSelection();
     showNotification("Loaded: " + fname, 1);
-}
-function actionSaveFile() {
-    showNotification("Saving file: " + window.activeFilePath);
-    fetch('/savefile', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({"lines": globalEditor.getValue(), "path": window.activeFilePath}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Success saving:', data);
-        showNotification("Saved", 1);
-    })
-    .catch((error) => {
-        console.error('Error saving:', error);
-        showNotification("Error saving file: " + error, 4);
-    });
 }
 
 function loadDirPath(path) {
@@ -119,6 +77,7 @@ function updateFileList(json) {
     for (var dirName of dirs) {
         addSpan(dirName, "left_element left_dir", actionActivateDirectory);
     }
+    addSpan("new directory...", "left_element left_action", actionCreateNewDirectory);
     
     addSpan("FILES", "left_title");
     addSpan("new file...", "left_element left_action", actionCreateNewFile);
@@ -134,4 +93,8 @@ function handleKeyDown(event) {
         actionSaveFile();
         event.preventDefault();
     }
+}
+
+function updateTitle() {
+    fetch("/info").then(response => response.json()).then(json => document.title = json.name);
 }

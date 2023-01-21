@@ -68,6 +68,27 @@ body {
 .left_dir {
     background-color: rgb(35,25,25);
 }
+.file-holder {
+    width: 60%;
+    float: left;
+    position: relative;
+    height: 100%;
+}
+#file-header {
+    height: 24px;
+    padding: 8px;
+    background-color: rgb(25,25,25);
+}
+#file-header span {
+    color: white;
+}
+#file-header span a {
+    color: white;
+}
+#file-header button {
+    float: right;
+}
+
 .eholder {
-    position: relative; width: 60%; height: 100%; float: left; background-color: black;
+    position: relative; height: calc(100% - 40px); background-color: black;
 }

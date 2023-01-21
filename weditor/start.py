@@ -1,6 +1,7 @@
 import os
 import json
 import sys
+import network
 from microWebSrv import MicroWebSrv
 
 
@@ -18,6 +19,17 @@ def _respond(httpResponse, content):
         contentCharset = "UTF-8",
         content = json.dumps(content)
     )
+
+@MicroWebSrv.route('/info')
+def get_info(httpClient, httpResponse):
+    args = httpClient.GetRequestQueryParams()
+    wlan = network.WLAN()
+    hostname = wlan.config('dhcp_hostname')
+    ip = wlan.ifconfig()[0]
+    name = hostname if hostname != 'espressif' else ip
+    content = {"name": "MPY: {}".format(name), "ip": ip, "hostname": hostname}
+    
+    _respond(httpResponse, content)
 
 @MicroWebSrv.route('/dir')
 def get_dir(httpClient, httpResponse):
@@ -72,6 +84,39 @@ def save_file(httpClient, httpResponse):
 
     _respond(httpResponse, content)
 
+@MicroWebSrv.route('/savefileb', 'POST')
+def save_file(httpClient, httpResponse):
+    headers = httpClient.GetRequestHeaders()
+    fpath = headers.get('File-Path', None)
+    if fpath:
+        dprint("Got save2 file request for: {}".format(fpath))
+        data = httpClient.ReadRequestContent()
+        content = {"error": True}
+        with open(fpath, "w") as f:
+            f.write(data)
+            content = {"saved": True}
+
+    _respond(httpResponse, content)
+
+@MicroWebSrv.route('/run')
+def run(httpClient, httpResponse):
+    args = httpClient.GetRequestQueryParams()
+    name = args.get('name', None)
+    stop = args.get('stop', None)
+    content = {}
+    if stop:
+        dprint("Stoping process")
+        import weditor.pmanager
+        weditor.pmanager.stop_process()
+        content = {"stopped": True}
+    elif name:
+        dprint("Starting process {}".format(name))
+        import weditor.pmanager
+        weditor.pmanager.restart_process(name)
+        content = {"started": True}
+
+    _respond(httpResponse, content)
+
 @MicroWebSrv.route('/newfile')
 def new_file(httpClient, httpResponse):
     args = httpClient.GetRequestQueryParams()
@@ -81,6 +126,18 @@ def new_file(httpClient, httpResponse):
         dprint("Creating new file {}".format(path))
         with open(path, 'a') as f:
             content = {"created": True}
+
+    _respond(httpResponse, content)
+
+@MicroWebSrv.route('/newdir')
+def new_file(httpClient, httpResponse):
+    args = httpClient.GetRequestQueryParams()
+    path = args.get('path', None)
+    content = {"created": False}
+    if path:
+        dprint("Creating new directory {}".format(path))
+        os.mkdir(path)
+        content = {"created": True}
 
     _respond(httpResponse, content)
 
