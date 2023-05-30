@@ -29,9 +29,9 @@ def get_dir(httpClient, httpResponse):
     elements = list(os.ilistdir(path))
     files = []
     dirs = []
+    prefix = "" if path == "/" else f"{path}"
     for pt in elements:
-        to_check  = f"/{pt[0]}" if path == "/" else f"{path}/{pt[0]}"
-        if to_check not in blacklisted_elements :
+        if f"{prefix}/{pt[0]}" not in blacklisted_elements :
                if pt[1]==32768:
                    files.append(pt[0])
                if pt[1]==16384:
