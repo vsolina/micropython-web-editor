@@ -3,6 +3,7 @@ import json
 import sys
 from microWebSrv import MicroWebSrv
 
+black_listed_elements = ["/webrepl_cfg.py"]
 
 DEBUG_PRINT = False
 
@@ -27,8 +28,15 @@ def get_dir(httpClient, httpResponse):
         path = path[:len(path)-1]
     dprint("Listing dir {}".format(path))
     elements = list(os.ilistdir(path))
-    files = [pt[0] for pt in elements if pt[1]==32768]
-    dirs = [pt[0] for pt in elements if pt[1]==16384]
+    files = []
+    dirs = []
+    for pt in elements:
+        to_check  = f"/{pt[0]}" if path == "/" else f"{path}/{pt[0]}"
+        if to_check not in black_listed_elements :
+               if pt[1]==32768:
+                   files.append(pt[0])
+               if pt[1]==16384:
+                   dirs.append(pt[0])
     content = {"files": files, "dirs": dirs}
     
     _respond(httpResponse, content)
