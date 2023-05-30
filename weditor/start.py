@@ -27,7 +27,7 @@ def get_dir(httpClient, httpResponse):
         path = path[:len(path)-1]
     dprint("Listing dir {}".format(path))
     elements = list(os.ilistdir(path))
-    files = [pt[0] for pt in elements if pt[1]==32768]
+    files = [pt[0] for pt in elements if pt[1]==32768 and pt[0] != "webrepl_cfg.py"]
     dirs = [pt[0] for pt in elements if pt[1]==16384]
     content = {"files": files, "dirs": dirs}
     
